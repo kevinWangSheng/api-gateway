@@ -7,10 +7,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api-gateway-test</artifactId>
+    <groupId>com.kevin</groupId>
+    <artifactId>api-gateway-interfaces</artifactId>
     <packaging>jar</packaging>
 
-    <name>api-gateway-test</name>
+    <name>api-gateway-interfaces</name>
     <url>http://maven.apache.org</url>
 
     <properties>

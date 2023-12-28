@@ -2,6 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.3.5.RELEASE</version>
+    <relativePath/>
+  </parent>
+
   <groupId>org.kevin</groupId>
   <artifactId>api-gateway</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -11,6 +18,9 @@
   <url>http://maven.apache.org</url>
   <modules>
     <module>api-gateway-test</module>
+    <module>api-gateway-interfaces</module>
+    <module>api-gateway-core</module>
+    <module>api-gateway-sdk</module>
   </modules>
 
   <properties>
