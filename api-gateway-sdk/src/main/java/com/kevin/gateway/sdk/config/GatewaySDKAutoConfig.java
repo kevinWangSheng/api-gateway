@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
  * @author wang
  * @create 2023-12-29-1:23
  */
-@Configuration
-@EnableConfigurationProperties(GatewaySDKConfigProperties.class)
+//@Configuration
+//@EnableConfigurationProperties(GatewaySDKConfigProperties.class)
 public class GatewaySDKAutoConfig {
     private Logger logger = LoggerFactory.getLogger(GatewaySDKAutoConfig.class);
 

@@ -32,6 +32,8 @@ public class GenericReferenceRegistry {
         }
         return genericReferenceProxyFactory.getInstance(methodName);
     }
+
+    // 这里根据对应的应用名称，接口名称和方法名称自己构建一个dubbo服务的启动
     public void addGenericReference(String application,String interfaceName,String methodName){
         // 获取对应的配置信息，包括程序，注册，以及泛化接口
         ApplicationConfig applicationConfig = configuration.getApplicationConfig(application);

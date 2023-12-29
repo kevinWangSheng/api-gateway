@@ -2,12 +2,17 @@ package org.kevin;
 
 import io.netty.channel.Channel;
 import org.junit.Test;
+import org.kevin.gateway.session.Configuration;
+import org.kevin.gateway.session.GenericReferenceSessionFactoryBuilder;
+import org.kevin.gateway.session.IGenericReferenceSessionFactory;
 import org.kevin.gateway.session.SessionServer;
+import org.kevin.gateway.session.defaults.GenericReferenceSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author wang
@@ -29,6 +34,17 @@ public class TestStartServer {
             Thread.sleep(500);
         }
         logger.info("the server is started");
+        Thread.sleep(Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void testGenericInvoke() throws ExecutionException, InterruptedException {
+        Configuration configuration = new Configuration();
+        configuration.addReference("api-gateway-test", "com.kevin.gateway.rpc.IActivityBooth", "sayHi");
+
+        GenericReferenceSessionFactoryBuilder sessionFactory = new GenericReferenceSessionFactoryBuilder();
+        Future<Channel> future = sessionFactory.build(configuration);
+        logger.info("服务启动完成：{}",future.get().id());
         Thread.sleep(Integer.MAX_VALUE);
     }
 }

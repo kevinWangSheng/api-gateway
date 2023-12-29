@@ -6,11 +6,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author wang
  * @create 2023-12-29-1:24
  */
-@ConfigurationProperties("api-gateway-sdk")
+//@ConfigurationProperties("api-gateway-sdk")
 public class GatewaySDKConfigProperties {
     private String systemId;
 
-    private String systemNameName;
+    private String systemName;
 
     private String systemRegistry;
 
@@ -25,11 +25,11 @@ public class GatewaySDKConfigProperties {
     }
 
     public String getSystemName() {
-        return systemNameName;
+        return systemName;
     }
 
     public void setSystemName(String systemNameName) {
-        this.systemNameName = systemNameName;
+        this.systemName = systemNameName;
     }
 
     public String getSystemRegistry() {

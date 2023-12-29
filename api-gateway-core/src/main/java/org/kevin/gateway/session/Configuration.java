@@ -86,5 +86,9 @@ public class Configuration {
     public IGenericReference getGenericReference(String interfaceName){
         return registryConfig.getGenericReference(interfaceName);
     }
+
+    public void addReference(String application,String interfaceName,String methodName){
+        registryConfig.addGenericReference(application,interfaceName,methodName);
+    }
 }
 

@@ -44,7 +44,7 @@ public class SessionServer implements Callable<Channel> {
             bs.group(boss,work)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG,128)
-                    .childHandler(new SessionChannelInitializer());
+                    .childHandler(new SessionChannelInitializer(configuration));
 
              future = bs.bind(new InetSocketAddress(port)).syncUninterruptibly();
             this.channel = future.channel();

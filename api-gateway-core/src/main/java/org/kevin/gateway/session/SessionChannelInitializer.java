@@ -13,11 +13,17 @@ import org.kevin.gateway.session.handlers.SessionServerHandler;
  */
 public class SessionChannelInitializer extends ChannelInitializer<SocketChannel> {
 
+    private Configuration configuration;
+
+    public SessionChannelInitializer(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         socketChannel.pipeline().addLast(new HttpRequestDecoder());
         socketChannel.pipeline().addLast(new HttpResponseEncoder());
         socketChannel.pipeline().addLast(new HttpObjectAggregator(1024*1024));
-        socketChannel.pipeline().addLast(new SessionServerHandler(null));
+        socketChannel.pipeline().addLast(new SessionServerHandler(configuration));
     }
 }
