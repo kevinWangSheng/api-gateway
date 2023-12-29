@@ -4,8 +4,9 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
-import org.kevin.gateway.bind.GenericReferenceRegistry;
 import org.kevin.gateway.bind.IGenericReference;
+import org.kevin.gateway.bind.MapperRegistry;
+import org.kevin.gateway.mapping.HttpStatement;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +22,16 @@ public class Configuration {
     public static final String activityBoothInterfaceVersion = "1.0.0";
 
     public static final String activityBoothInterfaceName = "com.kevin.gateway.rpc.IActivityBooth";
-    private final GenericReferenceRegistry registryConfig = new GenericReferenceRegistry(this);
+    private final MapperRegistry mapperRegistry = new MapperRegistry(this);
 
     private final Map<String, ApplicationConfig> configMap = new HashMap<>();
 
     private final Map<String, RegistryConfig> registryConfigMap = new HashMap<>();
 
     private final Map<String, ReferenceConfig<GenericService>> referenceConfigMap = new HashMap<>();
+
+    private final Map<String, HttpStatement> httpStatementMap = new HashMap<>();
+
 
 
     public Configuration(){
@@ -47,16 +51,12 @@ public class Configuration {
         referenceConfig.setVersion(activityBoothInterfaceVersion);
         referenceConfig.setGeneric("true");
         referenceConfigMap.put(activityBoothInterfaceName,referenceConfig);
-
     }
 
     public String getAddress() {
         return address;
     }
 
-    public GenericReferenceRegistry getRegistryConfig() {
-        return registryConfig;
-    }
 
     public Map<String, ApplicationConfig> getConfigMap() {
         return configMap;
@@ -83,12 +83,20 @@ public class Configuration {
         return referenceConfigMap.get(interfaceName);
     }
 
-    public IGenericReference getGenericReference(String interfaceName){
-        return registryConfig.getGenericReference(interfaceName);
+    public HttpStatement getHttpStatement(String uri){
+        return httpStatementMap.get(uri);
     }
 
-    public void addReference(String application,String interfaceName,String methodName){
-        registryConfig.addGenericReference(application,interfaceName,methodName);
+    public void addHttpStatement(HttpStatement statement) {
+        httpStatementMap.put(statement.getUri(),statement);
+    }
+
+    public IGenericReference getMapper(String uri, GatewaySession gatewaySession){
+        return mapperRegistry.getMapper(uri, gatewaySession);
+    }
+
+    public void addMapper(HttpStatement statement){
+        mapperRegistry.addMapper(statement);
     }
 }
 

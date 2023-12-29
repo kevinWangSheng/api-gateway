@@ -1,4 +1,4 @@
-package org.kevin.gateway.session;
+package org.kevin.gateway.socket;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -7,6 +7,9 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.kevin.gateway.session.Configuration;
+import org.kevin.gateway.session.GatewaySession;
+import org.kevin.gateway.session.defaults.DefaultGatewaySessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +20,11 @@ import java.util.concurrent.Callable;
  * @author wang
  * @create 2023-12-28-16:35
  */
-public class SessionServer implements Callable<Channel> {
+public class GatewaySessionServer implements Callable<Channel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SessionServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(GatewaySessionServer.class);
 
-    private Configuration configuration;
+    private DefaultGatewaySessionFactory sessionFactory;
     private EventLoopGroup boss = new NioEventLoopGroup();
     private EventLoopGroup work = new NioEventLoopGroup();
 
@@ -29,11 +32,11 @@ public class SessionServer implements Callable<Channel> {
 
     private final int port = 6789;
 
-    public SessionServer(Configuration configuration) {
-        this.configuration = configuration;
+    public GatewaySessionServer(DefaultGatewaySessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public SessionServer() {
+    public GatewaySessionServer() {
     }
 
     @Override
@@ -44,7 +47,7 @@ public class SessionServer implements Callable<Channel> {
             bs.group(boss,work)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG,128)
-                    .childHandler(new SessionChannelInitializer(configuration));
+                    .childHandler(new GatewaySessionChannelInitializer(sessionFactory));
 
              future = bs.bind(new InetSocketAddress(port)).syncUninterruptibly();
             this.channel = future.channel();

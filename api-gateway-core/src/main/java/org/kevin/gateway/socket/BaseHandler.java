@@ -1,4 +1,4 @@
-package org.kevin.gateway.session;
+package org.kevin.gateway.socket;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

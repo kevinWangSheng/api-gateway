@@ -7,8 +7,8 @@ import java.util.concurrent.Future;
 
 /**
  * @author wang
- * @create 2023-12-28-21:28
+ * @create 2023-12-29-19:11
  */
-public interface IGenericReferenceSessionFactory {
-    Future<Channel> openSession() throws InterruptedException, ExecutionException;
+public interface GatewaySessionFactory {
+    GatewaySession openSession();
 }

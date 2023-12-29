@@ -1,17 +1,15 @@
-package org.kevin.gateway.session.handlers;
+package org.kevin.gateway.socket.handlers;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.kevin.gateway.bind.IGenericReference;
-import org.kevin.gateway.session.BaseHandler;
-import org.kevin.gateway.session.Configuration;
+import org.kevin.gateway.socket.BaseHandler;
+import org.kevin.gateway.session.GatewaySession;
+import org.kevin.gateway.session.GatewaySessionFactory;
 import org.slf4j.Logger;
-
-import java.nio.charset.Charset;
 
 /** 主要处理发送过来的请求
  * @author wang
@@ -20,13 +18,16 @@ import java.nio.charset.Charset;
 public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(SessionServerHandler.class);
 
-    private final Configuration configuration;
 
-    public SessionServerHandler(Configuration configuration) {
-        this.configuration = configuration;
-    }
+
 
     public static final String favicon = "favicon.ico";
+
+    private GatewaySessionFactory gatewaySessionFactory;
+
+    public SessionServerHandler(GatewaySessionFactory gatewaySessionFactory) {
+        this.gatewaySessionFactory = gatewaySessionFactory;
+    }
 
     /**
      * 处理一个会话过来的请求,调用泛化接口，然后将调用结果封装，并将返回信息进行封装处理返回
@@ -36,19 +37,21 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
      */
     @Override
     protected void session(ChannelHandlerContext ctx, Channel channel, FullHttpRequest request) {
-        logger.info("网关接收到请求:uri:{},method:{}",request.uri(),request.method());
+        String uri = request.uri();
+        logger.info("网关接收到请求:uri:{},method:{}", uri,request.method());
         
         //返回处理的信息
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
 
         // 返回信息控制：简单处理
-        String methodName = request.uri().substring(1);
+        String methodName = uri.substring(1);
 
         if (methodName.equals(favicon)) return;
 
         //调用泛化接口，将结果进行返回
-        IGenericReference reference = configuration.getGenericReference("sayHi");
-        String result = reference.$invoke("test") + " " + System.currentTimeMillis();
+        GatewaySession gatewaySession = gatewaySessionFactory.openSession();
+        IGenericReference genericReference = gatewaySession.getMapper(uri);
+        String result = genericReference.$invoke("test") + " " + System.currentTimeMillis();
 
         //返回信息控制
         response.content().writeBytes(JSON.toJSONBytes(result, SerializerFeature.PrettyFormat));

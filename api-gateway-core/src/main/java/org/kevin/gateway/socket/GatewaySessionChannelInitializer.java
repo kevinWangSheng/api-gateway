@@ -1,22 +1,24 @@
-package org.kevin.gateway.session;
+package org.kevin.gateway.socket;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
-import org.kevin.gateway.session.handlers.SessionServerHandler;
+import org.kevin.gateway.session.Configuration;
+import org.kevin.gateway.session.GatewaySessionFactory;
+import org.kevin.gateway.socket.handlers.SessionServerHandler;
 
 /**
  * @author wang
  * @create 2023-12-28-16:33
  */
-public class SessionChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class GatewaySessionChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    private Configuration configuration;
+    private GatewaySessionFactory sessionFactory;
 
-    public SessionChannelInitializer(Configuration configuration) {
-        this.configuration = configuration;
+    public GatewaySessionChannelInitializer(GatewaySessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -24,6 +26,6 @@ public class SessionChannelInitializer extends ChannelInitializer<SocketChannel>
         socketChannel.pipeline().addLast(new HttpRequestDecoder());
         socketChannel.pipeline().addLast(new HttpResponseEncoder());
         socketChannel.pipeline().addLast(new HttpObjectAggregator(1024*1024));
-        socketChannel.pipeline().addLast(new SessionServerHandler(configuration));
+        socketChannel.pipeline().addLast(new SessionServerHandler(sessionFactory));
     }
 }
