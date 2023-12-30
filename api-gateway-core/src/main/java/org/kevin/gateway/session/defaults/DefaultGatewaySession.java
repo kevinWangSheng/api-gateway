@@ -12,6 +12,9 @@ import org.kevin.gateway.datasource.DataSource;
 import org.kevin.gateway.mapping.HttpStatement;
 import org.kevin.gateway.session.Configuration;
 import org.kevin.gateway.session.GatewaySession;
+import org.kevin.gateway.type.SimpleTypeRegistry;
+
+import java.util.Map;
 
 /**默认网关会话实现
  * @author wang
@@ -31,9 +34,19 @@ public class DefaultGatewaySession implements GatewaySession {
     }
 
     @Override
-    public Object get(String methodName, Object args) {
+    public Object get(String methodName, Map<String,Object> params) {
         Connection connection = dataSource.getConnection();
-        return connection.execute(methodName, new String[]{"java.lang.String"}, new String[]{"str"}, new Object[]{args});
+        HttpStatement httpStatement = configuration.getHttpStatement(uri);
+        String parameterType = httpStatement.getParameterType();
+        return connection.execute(methodName,
+                new String[]{parameterType},
+                new String[]{"ignore"},
+                SimpleTypeRegistry.isSimpleType(parameterType)? params.values().toArray() : new Object[]{params});
+    }
+
+    @Override
+    public Object post(String methodName, Map<String, Object> params) {
+        return get(methodName, params);
     }
 
     @Override

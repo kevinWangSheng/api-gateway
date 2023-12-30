@@ -57,8 +57,50 @@ public class TestStartServer {
                 "com.kevin.gateway.rpc.IActivityBooth",
                 "sayHi",
                 "api-gateway-test",
-                HttpCommandType.GET);
+                HttpCommandType.GET,
+                "java.lang.String");
         configuration.addMapper(httpStatement);
+        // 创建工厂帮忙创建
+        DefaultGatewaySessionFactory sessionFactory = new DefaultGatewaySessionFactory(configuration);
+        GatewaySessionServer server = new GatewaySessionServer(sessionFactory);
+
+        Future<Channel> future = Executors.newFixedThreadPool(2).submit(server);
+
+        Channel channel = future.get();
+
+        if(null == channel) {
+            logger.error("the netty server was start error");
+        }
+        // 启动过程
+        while(!channel.isActive()){
+            logger.info("the server is startting");
+            try{ Thread.sleep(500);} catch(InterruptedException e){ e.printStackTrace();}
+        }
+        logger.info("the server is started");
+
+        Thread.sleep(Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void testHttp() throws InterruptedException, ExecutionException {
+        Configuration configuration = new Configuration();
+        HttpStatement httpStatement01 = new HttpStatement(
+                "/wg/activity/sayHi",
+                "com.kevin.gateway.rpc.IActivityBooth",
+                "sayHi",
+                "api-gateway-test",
+                HttpCommandType.GET,
+                "java.lang.String");
+
+        HttpStatement httpStatement02 = new HttpStatement(
+                "/wg/activity/insert",
+                "com.kevin.gateway.rpc.IActivityBooth",
+                "insert",
+                "api-gateway-test",
+                HttpCommandType.POST,"com.kevin.gateway.rpc.dto.XReq");
+        configuration.addMapper(httpStatement01);
+        configuration.addMapper(httpStatement02);
+
         // 创建工厂帮忙创建
         DefaultGatewaySessionFactory sessionFactory = new DefaultGatewaySessionFactory(configuration);
         GatewaySessionServer server = new GatewaySessionServer(sessionFactory);

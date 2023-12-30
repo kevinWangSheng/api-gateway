@@ -15,6 +15,9 @@ public class HttpStatement {
 
     private HttpCommandType httpCommandType;
 
+    /** 参数类型(RPC 限定单参数注册)；new String[]{"java.lang.String"}、new String[]{"cn.bugstack.gateway.rpc.dto.XReq"} */
+    private String parameterType;
+
     public HttpStatement() {
     }
 
@@ -58,11 +61,22 @@ public class HttpStatement {
         this.httpCommandType = httpCommandType;
     }
 
-    public HttpStatement(String uri, String interfaceName, String methodName, String application, HttpCommandType commandType) {
+    public String getParameterType() {
+        return parameterType;
+    }
+
+    public void setParameterType(String parameterType) {
+        this.parameterType = parameterType;
+    }
+
+    public HttpStatement(String uri, String interfaceName, String methodName, String application, HttpCommandType httpCommandType, String parameterType) {
         this.uri = uri;
         this.interfaceName = interfaceName;
         this.methodName = methodName;
         this.application = application;
-        this.httpCommandType = commandType;
+        this.httpCommandType = httpCommandType;
+        this.parameterType = parameterType;
     }
+
+
 }

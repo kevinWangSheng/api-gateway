@@ -9,7 +9,10 @@ import org.kevin.gateway.bind.IGenericReference;
 import org.kevin.gateway.socket.BaseHandler;
 import org.kevin.gateway.session.GatewaySession;
 import org.kevin.gateway.session.GatewaySessionFactory;
+import org.kevin.gateway.socket.aggrement.RequestParser;
 import org.slf4j.Logger;
+
+import java.util.Map;
 
 /** 主要处理发送过来的请求
  * @author wang
@@ -43,15 +46,16 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
         //返回处理的信息
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
 
+        Map<String, Object> requestObj = new RequestParser(request).parese();
         // 返回信息控制：简单处理
-        String methodName = uri.substring(1);
-
-        if (methodName.equals(favicon)) return;
+        int idx = uri.indexOf("?");
+        uri = idx > 0 ? uri.substring(0, idx) : uri;
+        if("/favicon.ico".equals(uri)) return;
 
         //调用泛化接口，将结果进行返回
         GatewaySession gatewaySession = gatewaySessionFactory.openSession(uri);
         IGenericReference genericReference = gatewaySession.getMapper();
-        String result = genericReference.$invoke("test") + " " + System.currentTimeMillis();
+        String result = genericReference.$invoke(requestObj) + " " + System.currentTimeMillis();
 
         //返回信息控制
         response.content().writeBytes(JSON.toJSONBytes(result, SerializerFeature.PrettyFormat));
