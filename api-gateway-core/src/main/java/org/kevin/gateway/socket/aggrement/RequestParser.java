@@ -55,6 +55,8 @@ public class RequestParser {
                         return JSON.parseObject(content);
                     }
                     break;
+                case "none":
+                    return new HashMap<>();
                 default:
                     throw new RuntimeException("未实现的协议类型 Content-Type：" + contentType);
             }
@@ -66,7 +68,9 @@ public class RequestParser {
     private String getContentType() {
         Optional<Map.Entry<String,String>> header = request.headers().entries().stream().filter(val->val.getKey().equals("Content-Type")).findAny();
         Map.Entry<String,String> entry = header.orElse(null);
-        assert entry != null;
+        if(entry == null){
+            return "none";
+        }
         String contentType = entry.getValue();
         int idx = contentType.indexOf(";");
         if(idx > 0){

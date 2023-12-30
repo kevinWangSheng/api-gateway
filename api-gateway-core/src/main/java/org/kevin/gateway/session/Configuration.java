@@ -6,6 +6,9 @@ import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.kevin.gateway.bind.IGenericReference;
 import org.kevin.gateway.bind.MapperRegistry;
+import org.kevin.gateway.datasource.Connection;
+import org.kevin.gateway.executor.Executor;
+import org.kevin.gateway.executor.SimpleExecutors;
 import org.kevin.gateway.mapping.HttpStatement;
 
 import java.util.HashMap;
@@ -97,6 +100,10 @@ public class Configuration {
 
     public void addMapper(HttpStatement statement){
         mapperRegistry.addMapper(statement);
+    }
+
+    public Executor newExecutor(Connection connection){
+        return new SimpleExecutors(this,connection);
     }
 }
 

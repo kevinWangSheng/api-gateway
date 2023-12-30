@@ -10,6 +10,7 @@ import org.kevin.gateway.socket.BaseHandler;
 import org.kevin.gateway.session.GatewaySession;
 import org.kevin.gateway.session.GatewaySessionFactory;
 import org.kevin.gateway.socket.aggrement.RequestParser;
+import org.kevin.gateway.socket.aggrement.ResponseParse;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -44,9 +45,9 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
         logger.info("网关接收到请求:uri:{},method:{}", uri,request.method());
         
         //返回处理的信息
-        DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
 
-        Map<String, Object> requestObj = new RequestParser(request).parese();
+
+        Map<String, Object> args = new RequestParser(request).parese();
         // 返回信息控制：简单处理
         int idx = uri.indexOf("?");
         uri = idx > 0 ? uri.substring(0, idx) : uri;
@@ -55,23 +56,10 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
         //调用泛化接口，将结果进行返回
         GatewaySession gatewaySession = gatewaySessionFactory.openSession(uri);
         IGenericReference genericReference = gatewaySession.getMapper();
-        String result = genericReference.$invoke(requestObj) + " " + System.currentTimeMillis();
+        Object result = genericReference.$invoke(args);
 
         //返回信息控制
-        response.content().writeBytes(JSON.toJSONBytes(result, SerializerFeature.PrettyFormat));
-        //设置响应头
-        HttpHeaders headers = response.headers();
-
-        //配置响应头基础信息
-        headers.add(HttpHeaderNames.CONTENT_TYPE,HttpHeaderValues.APPLICATION_JSON+"; charset=UTF-8");
-        headers.add(HttpHeaderNames.CONTENT_LENGTH,response.content().readableBytes());
-        headers.add(HttpHeaderNames.CONNECTION,HttpHeaderValues.KEEP_ALIVE);
-
-        //配置跨域访问
-        headers.add(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN,"*");
-        headers.add(HttpHeaderNames.ACCESS_CONTROL_ALLOW_HEADERS,"*");
-        headers.add(HttpHeaderNames.ACCESS_CONTROL_ALLOW_METHODS,"POST, GET, PUT, DELETE");
-        headers.add(HttpHeaderNames.ACCESS_CONTROL_ALLOW_CREDENTIALS,"true");
+        DefaultFullHttpResponse response = new ResponseParse().parse(result);
 
         channel.writeAndFlush(response);
     }

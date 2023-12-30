@@ -9,6 +9,7 @@ import org.apache.dubbo.rpc.service.GenericService;
 import org.kevin.gateway.bind.IGenericReference;
 import org.kevin.gateway.datasource.Connection;
 import org.kevin.gateway.datasource.DataSource;
+import org.kevin.gateway.executor.Executor;
 import org.kevin.gateway.mapping.HttpStatement;
 import org.kevin.gateway.session.Configuration;
 import org.kevin.gateway.session.GatewaySession;
@@ -23,25 +24,21 @@ import java.util.Map;
 public class DefaultGatewaySession implements GatewaySession {
     private Configuration configuration;
 
-    private DataSource dataSource;
+    private Executor executor;
 
     private String uri;
 
-    public DefaultGatewaySession(Configuration configuration, DataSource dataSource, String uri) {
+    public DefaultGatewaySession(Configuration configuration, Executor executor, String uri) {
         this.configuration = configuration;
-        this.dataSource = dataSource;
+        this.executor = executor;
         this.uri = uri;
     }
 
     @Override
     public Object get(String methodName, Map<String,Object> params) {
-        Connection connection = dataSource.getConnection();
+
         HttpStatement httpStatement = configuration.getHttpStatement(uri);
-        String parameterType = httpStatement.getParameterType();
-        return connection.execute(methodName,
-                new String[]{parameterType},
-                new String[]{"ignore"},
-                SimpleTypeRegistry.isSimpleType(parameterType)? params.values().toArray() : new Object[]{params});
+        return executor.exec(httpStatement,params);
     }
 
     @Override
