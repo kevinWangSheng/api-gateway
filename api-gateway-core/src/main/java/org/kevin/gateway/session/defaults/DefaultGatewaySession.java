@@ -7,6 +7,8 @@ import org.apache.dubbo.config.bootstrap.DubboBootstrap;
 import org.apache.dubbo.config.utils.ReferenceConfigCache;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.kevin.gateway.bind.IGenericReference;
+import org.kevin.gateway.datasource.Connection;
+import org.kevin.gateway.datasource.DataSource;
 import org.kevin.gateway.mapping.HttpStatement;
 import org.kevin.gateway.session.Configuration;
 import org.kevin.gateway.session.GatewaySession;
@@ -18,32 +20,24 @@ import org.kevin.gateway.session.GatewaySession;
 public class DefaultGatewaySession implements GatewaySession {
     private Configuration configuration;
 
-    public DefaultGatewaySession(Configuration configuration) {
+    private DataSource dataSource;
+
+    private String uri;
+
+    public DefaultGatewaySession(Configuration configuration, DataSource dataSource, String uri) {
         this.configuration = configuration;
+        this.dataSource = dataSource;
+        this.uri = uri;
     }
 
     @Override
-    public Object get(String uri, Object args) {
-        HttpStatement httpStatement = configuration.getHttpStatement(uri);
-        String application = httpStatement.getApplication();
-        String interfaceName = httpStatement.getInterfaceName();
-
-        ApplicationConfig applicationConfig = configuration.getApplicationConfig(application);
-        ReferenceConfig<GenericService> referenceConfig = configuration.getReferenceConfig(interfaceName);
-        RegistryConfig registryConfig = configuration.getRegistryConfig(application);
-
-        // 构建dubbo服务
-        DubboBootstrap bootstrap = DubboBootstrap.getInstance();
-        bootstrap.application(applicationConfig).registry(registryConfig).reference(referenceConfig).start();
-
-        //进行泛化调用
-        ReferenceConfigCache cache = ReferenceConfigCache.getCache();
-        GenericService genericService = cache.get(referenceConfig);
-        return genericService.$invoke(httpStatement.getMethodName(), new String[]{"java.lang.String"}, new Object[]{"wangwu"});
+    public Object get(String methodName, Object args) {
+        Connection connection = dataSource.getConnection();
+        return connection.execute(methodName, new String[]{"java.lang.String"}, new String[]{"str"}, new Object[]{args});
     }
 
     @Override
-    public IGenericReference getMapper(String uri) {
+    public IGenericReference getMapper() {
         return configuration.getMapper(uri,this);
     }
 

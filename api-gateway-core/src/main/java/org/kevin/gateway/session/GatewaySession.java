@@ -9,7 +9,7 @@ import org.kevin.gateway.bind.IGenericReference;
 public interface GatewaySession {
     Object get(String uri,Object args);
 
-    IGenericReference getMapper(String uri);
+    IGenericReference getMapper();
 
     Configuration getConfiguration();
 }

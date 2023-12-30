@@ -1,6 +1,7 @@
 package org.kevin.gateway.bind;
 
 import org.kevin.gateway.mapping.HttpCommandType;
+import org.kevin.gateway.mapping.HttpStatement;
 import org.kevin.gateway.session.Configuration;
 import org.kevin.gateway.session.GatewaySession;
 
@@ -9,13 +10,14 @@ import org.kevin.gateway.session.GatewaySession;
  * @create 2023-12-29-17:42
  */
 public class MapperMethod {
-    private String uri;
+    private String methodName;
 
     private HttpCommandType commandType;
 
     public MapperMethod(String uri, Configuration configuration) {
-        this.uri = uri;
-        this.commandType = configuration.getHttpStatement(uri).getHttpCommandType();
+        HttpStatement httpStatement = configuration.getHttpStatement(uri);
+        this.methodName = httpStatement.getMethodName();
+        this.commandType = httpStatement.getHttpCommandType();
     }
 
     public Object execute(GatewaySession session, Object args){
@@ -23,7 +25,7 @@ public class MapperMethod {
         switch (commandType){
             case GET:
                 // 执行对应的请求操作
-                result = session.get(uri,args);
+                result = session.get(methodName,args);
                 break;
             case POST:
                 break;

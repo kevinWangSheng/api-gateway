@@ -10,5 +10,5 @@ import java.util.concurrent.Future;
  * @create 2023-12-29-19:11
  */
 public interface GatewaySessionFactory {
-    GatewaySession openSession();
+    GatewaySession openSession(String uri);
 }

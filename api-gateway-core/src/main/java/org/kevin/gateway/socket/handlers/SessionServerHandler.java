@@ -49,8 +49,8 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
         if (methodName.equals(favicon)) return;
 
         //调用泛化接口，将结果进行返回
-        GatewaySession gatewaySession = gatewaySessionFactory.openSession();
-        IGenericReference genericReference = gatewaySession.getMapper(uri);
+        GatewaySession gatewaySession = gatewaySessionFactory.openSession(uri);
+        IGenericReference genericReference = gatewaySession.getMapper();
         String result = genericReference.$invoke("test") + " " + System.currentTimeMillis();
 
         //返回信息控制
