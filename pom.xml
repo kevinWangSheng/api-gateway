@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.5.RELEASE</version>
+    <version>2.6.5</version>
     <relativePath/>
   </parent>
 
@@ -21,6 +21,7 @@
     <module>api-gateway-interfaces</module>
     <module>api-gateway-core</module>
     <module>api-gateway-sdk</module>
+    <module>apt-gateway-center</module>
   </modules>
 
   <properties>
