@@ -18,6 +18,8 @@ public class HttpStatement {
     /** 参数类型(RPC 限定单参数注册)；new String[]{"java.lang.String"}、new String[]{"cn.bugstack.gateway.rpc.dto.XReq"} */
     private String parameterType;
 
+    private boolean isAuth;
+
     public HttpStatement() {
     }
 
@@ -69,14 +71,21 @@ public class HttpStatement {
         this.parameterType = parameterType;
     }
 
-    public HttpStatement(String uri, String interfaceName, String methodName, String application, HttpCommandType httpCommandType, String parameterType) {
+    public boolean isAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(boolean auth) {
+        isAuth = auth;
+    }
+
+    public HttpStatement(String uri, String interfaceName, String methodName, String application, HttpCommandType httpCommandType, String parameterType, boolean isAuth) {
         this.uri = uri;
         this.interfaceName = interfaceName;
         this.methodName = methodName;
         this.application = application;
         this.httpCommandType = httpCommandType;
         this.parameterType = parameterType;
+        this.isAuth = isAuth;
     }
-
-
 }

@@ -6,9 +6,14 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.kevin.gateway.bind.IGenericReference;
+import org.kevin.gateway.executor.result.SessionResult;
+import org.kevin.gateway.mapping.HttpStatement;
+import org.kevin.gateway.session.Configuration;
 import org.kevin.gateway.socket.BaseHandler;
 import org.kevin.gateway.session.GatewaySession;
 import org.kevin.gateway.session.GatewaySessionFactory;
+import org.kevin.gateway.socket.aggrement.AggrementConstance;
+import org.kevin.gateway.socket.aggrement.GatewayResultMessage;
 import org.kevin.gateway.socket.aggrement.RequestParser;
 import org.kevin.gateway.socket.aggrement.ResponseParse;
 import org.slf4j.Logger;
@@ -27,10 +32,10 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
 
     public static final String favicon = "favicon.ico";
 
-    private GatewaySessionFactory gatewaySessionFactory;
+    private Configuration configuration;
 
-    public SessionServerHandler(GatewaySessionFactory gatewaySessionFactory) {
-        this.gatewaySessionFactory = gatewaySessionFactory;
+    public SessionServerHandler(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     /**
@@ -41,26 +46,20 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
      */
     @Override
     protected void session(ChannelHandlerContext ctx, Channel channel, FullHttpRequest request) {
-        String uri = request.uri();
-        logger.info("网关接收到请求:uri:{},method:{}", uri,request.method());
-        
-        //返回处理的信息
+        try {
+            RequestParser requestParser = new RequestParser(request);
+            String uri = requestParser.getUri();
 
+            // 设置信息
+            HttpStatement httpStatement = configuration.getHttpStatement(uri);
+            channel.attr(AggrementConstance.HTTP_STATEMENT).set(httpStatement);
 
-        Map<String, Object> args = new RequestParser(request).parese();
-        // 返回信息控制：简单处理
-        int idx = uri.indexOf("?");
-        uri = idx > 0 ? uri.substring(0, idx) : uri;
-        if("/favicon.ico".equals(uri)) return;
-
-        //调用泛化接口，将结果进行返回
-        GatewaySession gatewaySession = gatewaySessionFactory.openSession(uri);
-        IGenericReference genericReference = gatewaySession.getMapper();
-        Object result = genericReference.$invoke(args);
-
-        //返回信息控制
-        DefaultFullHttpResponse response = new ResponseParse().parse(result);
-
-        channel.writeAndFlush(response);
+            //放行服务
+            request.retain();
+            ctx.fireChannelRead(request);
+        } catch (Exception e) {
+            DefaultFullHttpResponse response = new ResponseParse().parse(GatewayResultMessage.buildFail(AggrementConstance.ResponseCode._500.getCode(), "网络协议调用失败"));
+            channel.writeAndFlush(response);
+        }
     }
 }

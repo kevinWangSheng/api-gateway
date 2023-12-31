@@ -80,4 +80,12 @@ public class RequestParser {
         }
 
     }
+
+    public String getUri() {
+        String uri = request.uri();
+        int idx = uri.indexOf("?");
+        uri = idx>0 ? uri.substring(0,idx) : uri;
+        if("favicon.ico".equals(uri)) return null;
+        return uri;
+    }
 }

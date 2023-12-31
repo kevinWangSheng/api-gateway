@@ -1,5 +1,7 @@
 package org.kevin.gateway.bind;
 
+import org.kevin.gateway.executor.result.SessionResult;
+
 import java.util.Map;
 
 /**
@@ -8,5 +10,5 @@ import java.util.Map;
  */
 public interface IGenericReference {
 
-    Object $invoke(Map<String,Object> args);
+    SessionResult $invoke(Map<String,Object> args);
 }

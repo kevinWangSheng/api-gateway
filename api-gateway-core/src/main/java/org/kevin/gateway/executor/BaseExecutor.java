@@ -1,7 +1,7 @@
 package org.kevin.gateway.executor;
 
 import org.kevin.gateway.datasource.Connection;
-import org.kevin.gateway.executor.result.GatewayResult;
+import org.kevin.gateway.executor.result.SessionResult;
 import org.kevin.gateway.mapping.HttpStatement;
 import org.kevin.gateway.session.Configuration;
 import org.kevin.gateway.type.SimpleTypeRegistry;
@@ -27,7 +27,7 @@ public abstract class BaseExecutor implements Executor{
     }
 
     @Override
-    public GatewayResult exec(HttpStatement httpStatement, Map<String, Object> params) {
+    public SessionResult exec(HttpStatement httpStatement, Map<String, Object> params) {
         String methodName = httpStatement.getMethodName();
         String parameterType = httpStatement.getParameterType();
         String[] paramtersTypes = new String[]{parameterType};
@@ -36,9 +36,9 @@ public abstract class BaseExecutor implements Executor{
         logger.info("执行调用：application:{},interface:{},method：{}，parameterType:{}",httpStatement.getApplication(),httpStatement.getInterfaceName(),methodName,parameterType);
         try {
             Object result = doExec(methodName, paramtersTypes, args);
-            return GatewayResult.buildSuccess(result);
+            return SessionResult.buildSuccess(result);
         } catch (Exception e) {
-            return GatewayResult.buildFail(e.getMessage());
+            return SessionResult.buildFail(e.getMessage());
         }
 
     }

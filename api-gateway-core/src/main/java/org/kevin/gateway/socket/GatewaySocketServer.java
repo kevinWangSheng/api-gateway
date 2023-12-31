@@ -8,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.kevin.gateway.session.Configuration;
-import org.kevin.gateway.session.GatewaySession;
 import org.kevin.gateway.session.defaults.DefaultGatewaySessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +19,13 @@ import java.util.concurrent.Callable;
  * @author wang
  * @create 2023-12-28-16:35
  */
-public class GatewaySessionServer implements Callable<Channel> {
+public class GatewaySocketServer implements Callable<Channel> {
 
-    private static final Logger logger = LoggerFactory.getLogger(GatewaySessionServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(GatewaySocketServer.class);
 
     private DefaultGatewaySessionFactory sessionFactory;
+
+    private Configuration configuration;
     private EventLoopGroup boss = new NioEventLoopGroup();
     private EventLoopGroup work = new NioEventLoopGroup();
 
@@ -32,11 +33,12 @@ public class GatewaySessionServer implements Callable<Channel> {
 
     private final int port = 6789;
 
-    public GatewaySessionServer(DefaultGatewaySessionFactory sessionFactory) {
+    public GatewaySocketServer(DefaultGatewaySessionFactory sessionFactory, Configuration configuration) {
         this.sessionFactory = sessionFactory;
+        this.configuration = configuration;
     }
 
-    public GatewaySessionServer() {
+    public GatewaySocketServer() {
     }
 
     @Override
@@ -47,7 +49,7 @@ public class GatewaySessionServer implements Callable<Channel> {
             bs.group(boss,work)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG,128)
-                    .childHandler(new GatewaySessionChannelInitializer(sessionFactory));
+                    .childHandler(new GatewaySessionChannelInitializer(configuration,sessionFactory));
 
              future = bs.bind(new InetSocketAddress(port)).syncUninterruptibly();
             this.channel = future.channel();

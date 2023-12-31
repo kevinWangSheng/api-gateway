@@ -9,9 +9,9 @@ import io.netty.handler.codec.http.*;
  * @create 2023-12-30-22:20
  */
 public class ResponseParse {
-    public DefaultFullHttpResponse parse(Object result){
+    public DefaultFullHttpResponse parse(GatewayResultMessage result){
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-        response.content().writeBytes(JSON.toJSONBytes(result, SerializerFeature.PrettyFormat));
+        response.content().writeBytes(JSON.toJSONString(result).getBytes());
         //设置响应头
         HttpHeaders headers = response.headers();
 

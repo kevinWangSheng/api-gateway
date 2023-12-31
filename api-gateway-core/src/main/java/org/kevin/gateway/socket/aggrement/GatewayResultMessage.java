@@ -1,27 +1,20 @@
-package org.kevin.gateway.executor.result;
+package org.kevin.gateway.socket.aggrement;
 
 /**
  * @author wang
- * @create 2023-12-30-21:56
+ * @create 2023-12-31-15:07
  */
-public class GatewayResult {
+public class GatewayResultMessage {
     private String code;
+
     private String info;
 
     private Object data;
 
-    public GatewayResult(String code, String info, Object data) {
+    public GatewayResultMessage(String code, String info, Object data) {
         this.code = code;
         this.info = info;
         this.data = data;
-    }
-
-    public static GatewayResult buildSuccess(Object data){
-        return new GatewayResult("0000","success",data);
-    }
-
-    public static GatewayResult buildFail(String message ){
-        return new GatewayResult("0001",message,null);
     }
 
     public String getCode() {
@@ -46,5 +39,13 @@ public class GatewayResult {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public static GatewayResultMessage buildSuccess(Object data){
+        return new GatewayResultMessage(AggrementConstance.ResponseCode._200.getCode(),AggrementConstance.ResponseCode._200.getCode(),data);
+    }
+
+    public static GatewayResultMessage buildFail(String code,String info ){
+        return new GatewayResultMessage(code,info,null);
     }
 }
