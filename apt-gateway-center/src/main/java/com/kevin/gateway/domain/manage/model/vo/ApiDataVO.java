@@ -1,10 +1,10 @@
-package com.kevin.gateway.domain.model;
+package com.kevin.gateway.domain.manage.model.vo;
 
 /**
  * @author wang
  * @create 2024-01-01-0:33
  */
-public class ApiData {
+public class ApiDataVO {
     private String application; // 应用名称
 
     private String interfaceName; // 接口名称

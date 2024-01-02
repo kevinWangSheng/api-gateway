@@ -1,7 +1,7 @@
 package com.kevin.gateway.infrustructs.repository;
 
-import com.kevin.gateway.domain.model.ApiData;
-import com.kevin.gateway.domain.repository.IApiRepository;
+import com.kevin.gateway.domain.manage.model.vo.ApiDataVO;
+import com.kevin.gateway.domain.manage.repository.IApiRepository;
 import com.kevin.gateway.infrustructs.dao.HttpStatementDao;
 import com.kevin.gateway.infrustructs.po.HttpStatement;
 import org.springframework.stereotype.Component;
@@ -19,14 +19,14 @@ public class ApiRepository implements IApiRepository {
     @Resource
     private HttpStatementDao httpStatementDao;
     @Override
-    public List<ApiData> getAllApiData() {
+    public List<ApiDataVO> getAllApiData() {
         List<HttpStatement> list = httpStatementDao.queryAllHttpStatement();
         if(null == list || list.size() == 0){
             return null;
         }
-        List<ApiData> apiDatas = new ArrayList<>();
+        List<ApiDataVO> apiDatas = new ArrayList<>();
         for(HttpStatement httpStatement : list){
-            ApiData apiData = new ApiData();
+            ApiDataVO apiData = new ApiDataVO();
             apiData.setMethodName(httpStatement.getMethodName());
             apiData.setParameterType(httpStatement.getParameterTypes());
             apiData.setUri(httpStatement.getUri());
