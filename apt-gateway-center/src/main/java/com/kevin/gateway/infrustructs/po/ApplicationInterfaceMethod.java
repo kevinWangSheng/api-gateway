@@ -20,7 +20,7 @@ public class ApplicationInterfaceMethod implements Serializable {
 
     private String methodName; // 方法名称
 
-    private String parameterType; // 参数类型 比如 java.lang.String
+    private String parameterTypes; // 参数类型 比如 java.lang.String
 
     private String uri; // http请求地址
 
@@ -41,7 +41,7 @@ public class ApplicationInterfaceMethod implements Serializable {
         this.interfaceId = interfaceId;
         this.methodId = methodId;
         this.methodName = methodName;
-        this.parameterType = parameterType;
+        this.parameterTypes = parameterType;
         this.uri = uri;
         this.httpCommandType = httpCommandType;
         this.auth = auth;
@@ -89,12 +89,12 @@ public class ApplicationInterfaceMethod implements Serializable {
         this.methodName = methodName;
     }
 
-    public String getParameterType() {
-        return parameterType;
+    public String getParameterTypes() {
+        return parameterTypes;
     }
 
-    public void setParameterType(String parameterType) {
-        this.parameterType = parameterType;
+    public void setParameterTypes(String parameterTypes) {
+        this.parameterTypes = parameterTypes;
     }
 
     public String getUri() {

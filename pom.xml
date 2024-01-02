@@ -22,6 +22,7 @@
     <module>api-gateway-core</module>
     <module>api-gateway-sdk</module>
     <module>apt-gateway-center</module>
+      <module>api-gateway-assist</module>
   </modules>
 
   <properties>
