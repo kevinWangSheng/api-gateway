@@ -4,10 +4,14 @@ package com.kevin.gateway.common;
  * @author wang
  * @create 2024-01-02-21:23
  */
-public class Result {
+public class Result<T> {
     private String code;
 
     private String info;
+
+    private T data;
+
+
 
     public Result() {
     }
@@ -31,5 +35,13 @@ public class Result {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

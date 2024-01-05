@@ -22,6 +22,13 @@ import java.util.Map;
  * @create 2023-12-28-21:13
  */
 public class Configuration {
+
+    private String host;
+
+    private Integer port;
+
+
+
     private final MapperRegistry mapperRegistry = new MapperRegistry(this);
 
     private final Map<String, ApplicationConfig> configMap = new HashMap<>();
@@ -109,6 +116,22 @@ public class Configuration {
 
     public boolean authValidata(String id,String token){
         return auth.validate(id,token);
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
     }
 }
 
