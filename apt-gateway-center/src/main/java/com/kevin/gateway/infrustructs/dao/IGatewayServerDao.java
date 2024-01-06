@@ -1,5 +1,6 @@
 package com.kevin.gateway.infrustructs.dao;
 
+import com.kevin.gateway.domain.manage.model.dto.GatewayServerDto;
 import com.kevin.gateway.infrustructs.po.GatewayServer;
 
 import java.util.List;
@@ -10,4 +11,6 @@ import java.util.List;
  */
 public interface IGatewayServerDao {
     List<GatewayServer> queryGatewayServerList();
+
+    List<GatewayServer> queryPageByGroupId(GatewayServerDto gatewayServerReq);
 }

@@ -62,4 +62,17 @@
             </if>
         </where>
     </select>
+    <select id="queryPageBySystemIdAndInterfaceId"
+            resultMap="applicationInterfaceMethodMap">
+        select `system_id`,`interface_id`,`method_id`,`method_name`,`parameter_type`,`uri`,`http_command_type`,`auth` from application_interface_method
+        <where>
+            <if test="null != systemId and systemId != '' ">
+                and system_id = #{systemId}
+            </if>
+            <if test="null != interfaceId and interfaceId != '' ">
+                and interface_id = #{interfaceId}
+            </if>
+        </where>
+        limit #{pageStart},#{pageEnd}
+    </select>
 </mapper>

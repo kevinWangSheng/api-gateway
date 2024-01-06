@@ -43,4 +43,16 @@
             </if>
         </where>
     </select>
+    <select id="queryPageBySystemIdAndName" resultType="com.kevin.gateway.infrustructs.po.ApplicationSystem">
+        select `system_id`,`system_name`, `system_type`, `system_registry` from application_system
+        <where>
+            <if test="systemId != null and systemId != ''">
+                and system_id = #{systemId}
+            </if>
+            <if test="systemName != null and systemName != ''">
+                and system_name like concat('%',#{systemName},'%')
+            </if>
+        </where>
+        limit #{pageStart},#{pageEnd}
+    </select>
 </mapper>

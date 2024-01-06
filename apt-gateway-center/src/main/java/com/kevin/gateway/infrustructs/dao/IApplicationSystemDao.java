@@ -1,5 +1,6 @@
 package com.kevin.gateway.infrustructs.dao;
 
+import com.kevin.gateway.domain.manage.model.dto.ApplicationSystemDto;
 import com.kevin.gateway.infrustructs.po.ApplicationSystem;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +15,6 @@ public interface IApplicationSystemDao {
 
 
     List<ApplicationSystem> querySystemListBySystemIds(@Param("systemIds") List<String> systemIdList);
+
+    List<ApplicationSystem> queryPageBySystemIdAndName(ApplicationSystemDto applicationSystemDto);
 }

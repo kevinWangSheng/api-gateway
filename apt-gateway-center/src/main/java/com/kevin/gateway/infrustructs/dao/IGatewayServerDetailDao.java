@@ -1,6 +1,9 @@
 package com.kevin.gateway.infrustructs.dao;
 
+import com.kevin.gateway.domain.manage.model.dto.GatewayServerDetailDto;
 import com.kevin.gateway.infrustructs.po.GatewayServerDetail;
+
+import java.util.List;
 
 /**
  * @author wang
@@ -12,4 +15,6 @@ public interface IGatewayServerDetailDao {
     GatewayServerDetail queryGatewayServerDetail(GatewayServerDetail gatewayServerDetail);
 
     boolean updateGatewayStatus(GatewayServerDetail gatewayServerDetail);
+
+    List<GatewayServerDetail> queryPageByGroupIdAndGatewayId(GatewayServerDetailDto gatewayDetailRequest);
 }

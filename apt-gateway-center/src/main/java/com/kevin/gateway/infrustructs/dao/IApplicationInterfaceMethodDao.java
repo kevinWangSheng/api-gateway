@@ -1,5 +1,6 @@
 package com.kevin.gateway.infrustructs.dao;
 
+import com.kevin.gateway.domain.manage.model.dto.ApplicationInterfaceMethodDto;
 import com.kevin.gateway.infrustructs.po.ApplicationInterfaceMethod;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,4 +14,6 @@ public interface IApplicationInterfaceMethodDao {
     void insert(ApplicationInterfaceMethod applicationInterfaceMethod);
 
     List<ApplicationInterfaceMethod> queryMethodListBySystemIdsAndInterfaceIds(@Param("systemIds")List<String> systemIdList, @Param("interfaceIds")List<String> interfaceIds);
+
+    List<ApplicationInterfaceMethod> queryPageBySystemIdAndInterfaceId(ApplicationInterfaceMethodDto applicationInterfaceMethodDto);
 }

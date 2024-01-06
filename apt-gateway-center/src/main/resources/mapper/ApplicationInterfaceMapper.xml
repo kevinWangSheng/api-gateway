@@ -43,6 +43,19 @@
                 </foreach>
         </where>
     </select>
+    <select id="queryPageBySystemIdAndInterfaceId"
+            resultMap="applicationInterfaceMap">
+        select `system_id`,`interface_id`,`interface_name`, `interface_version` from application_interface
+        <where>
+            <if test="systemId != null and systemId != ''">
+                and system_id = #{systemId}
+            </if>
+            <if test="interfaceId != null and interfaceId != ''">
+                and interface_id = #{interfaceId}
+            </if>
+        </where>
+        limit #{pageStart},#{pageEnd}
+    </select>
 
 
 </mapper>

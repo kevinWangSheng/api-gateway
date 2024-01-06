@@ -1,5 +1,6 @@
 package com.kevin.gateway.infrustructs.dao;
 
+import com.kevin.gateway.domain.manage.model.dto.ApplicationInterfaceDto;
 import com.kevin.gateway.infrustructs.po.ApplicationInterface;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,4 +14,6 @@ public interface IApplicationInterfaceDao {
     void insert(ApplicationInterface applicationInterface);
 
     List<ApplicationInterface> queryInterfaceListBySystemIds(@Param("systemIds") List<String> systemIdList);
+
+    List<ApplicationInterface> queryPageBySystemIdAndInterfaceId(ApplicationInterfaceDto applicationInterfaceDto);
 }

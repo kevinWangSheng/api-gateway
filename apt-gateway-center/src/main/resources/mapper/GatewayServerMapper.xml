@@ -11,5 +11,14 @@
     <select id="queryGatewayServerList" resultMap="gatewayServerMap">
         select id, system_id, group_name from gateway_server
     </select>
+    <select id="queryPageByGroupId" resultMap="gatewayServerMap">
+        select id, system_id, group_name from gateway_server
+        <where>
+            <if test="groupId != null and groupId != ''">
+                and group_name = #{groupId}
+            </if>
+        </where>
+        limit #{pageStart},#{pageEnd}
+    </select>
 
 </mapper>

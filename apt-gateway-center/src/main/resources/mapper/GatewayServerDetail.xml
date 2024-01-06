@@ -27,5 +27,17 @@
         from gateway_server_detail
         where gateway_id = #{gatewayId} and gateway_address = #{gatewayAddress}
     </select>
+    <select id="queryPageByGroupIdAndGatewayId" resultMap="gatewayServerDetailMap">
+        select group_id, gateway_id, gateway_name, gateway_address, status
+        form gateway_server_detail
+        <where>
+            <if test="groupId != null and groupId != ''">
+                and group_id = #{groupId}
+            </if>
+            <if test="gatewayId != null and gatewayId != ''">
+                and gateway_id = #{gatewayId}
+            </if>
+        </where>
+    </select>
 
 </mapper>

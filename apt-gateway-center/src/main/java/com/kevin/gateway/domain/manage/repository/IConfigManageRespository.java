@@ -1,7 +1,8 @@
 package com.kevin.gateway.domain.manage.repository;
 
+import com.kevin.gateway.domain.manage.model.dto.*;
 import com.kevin.gateway.domain.manage.model.vo.*;
-
+import com.kevin.gateway.domain.operator.model.vo.*;
 
 import java.util.List;
 
@@ -27,4 +28,16 @@ public interface IConfigManageRespository {
     List<ApplicationInterfaceMethodVO> queryApplicationInterfaceMethodList(List<String> systemIdList, List<String> interfaceIds);
 
     String queryGatewayDistributionGatewayIdBySystemId(String systemId);
+
+    List<GatewayServerDataVO> queryGatewayServerPageByGroupId(GatewayServerDto gatewayServerReq);
+
+    List<GatewayServerDetailDataVO> queryGatewayServerDetailPage(GatewayServerDetailDto gatewayDetailRequest);
+
+    List<GatewayDistributionDataVO> queryGatewayDistribution(GatewayDistributionDto gatewayDistributionDto);
+
+    List<ApplicationSystemVO> queryApplicationSystem(ApplicationSystemDto applicationSystemDto);
+
+    List<ApplicationInterfaceDataVO> queryApplicationInterfacePage(ApplicationInterfaceDto applicationInterfaceDto);
+
+    List<ApplicationInterfaceMethodDataVO> queryApplicationInterfaceMethodPage(ApplicationInterfaceMethodDto applicationInterfaceMethodDto);
 }

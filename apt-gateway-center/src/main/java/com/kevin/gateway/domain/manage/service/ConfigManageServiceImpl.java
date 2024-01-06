@@ -2,9 +2,15 @@ package com.kevin.gateway.domain.manage.service;
 
 import com.kevin.gateway.application.IConfigManageService;
 import com.kevin.gateway.domain.manage.model.aggregates.ApplicationSystemRichInfo;
+import com.kevin.gateway.domain.manage.model.dto.*;
 import com.kevin.gateway.domain.manage.model.vo.*;
 import com.kevin.gateway.domain.manage.repository.IConfigManageRespository;
 
+import com.kevin.gateway.domain.operator.model.vo.ApplicationInterfaceDataVO;
+import com.kevin.gateway.domain.operator.model.vo.ApplicationInterfaceMethodDataVO;
+import com.kevin.gateway.domain.operator.model.vo.GatewayDistributionDataVO;
+import com.kevin.gateway.domain.operator.model.vo.GatewayServerDataVO;
+import com.kevin.gateway.domain.operator.model.vo.GatewayServerDetailDataVO;
 import com.kevin.gateway.infrustructs.common.Constance;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -75,6 +81,36 @@ public class ConfigManageServiceImpl implements IConfigManageService {
     @Override
     public String queryGatewayDistributionGatewayIdBySystemId(String systemId) {
         return configManageRespository.queryGatewayDistributionGatewayIdBySystemId(systemId);
+    }
+
+    @Override
+    public List<GatewayServerDataVO> queryGatewayServer(GatewayServerDto gatewayServerReq) {
+        return configManageRespository.queryGatewayServerPageByGroupId(gatewayServerReq);
+    }
+
+    @Override
+    public List<GatewayServerDetailDataVO> queryGatewayServerDetailPage(GatewayServerDetailDto gatewayDetailRequest) {
+        return configManageRespository.queryGatewayServerDetailPage(gatewayDetailRequest);
+    }
+
+    @Override
+    public List<GatewayDistributionDataVO> queryGatewayDistribution(GatewayDistributionDto gatewayDistributionDto) {
+        return configManageRespository.queryGatewayDistribution(gatewayDistributionDto);
+    }
+
+    @Override
+    public List<ApplicationSystemVO> queryApplicationSystem(ApplicationSystemDto applicationSystemDto) {
+        return configManageRespository.queryApplicationSystem(applicationSystemDto);
+    }
+
+    @Override
+    public List<ApplicationInterfaceDataVO> queryApplicationInterfacePage(ApplicationInterfaceDto applicationInterfaceDto) {
+        return configManageRespository.queryApplicationInterfacePage(applicationInterfaceDto);
+    }
+
+    @Override
+    public List<ApplicationInterfaceMethodDataVO> queryApplicationInterfaceMethodPage(ApplicationInterfaceMethodDto applicationInterfaceMethodDto) {
+        return configManageRespository.queryApplicationInterfaceMethodPage(applicationInterfaceMethodDto);
     }
 
     private ApplicationSystemRichInfo buildApplicationSystemVOList(String gatewayId,List<ApplicationSystemVO> applicationSystemVOList, List<ApplicationInterfaceVO> applicationInterfaceVOList, List<ApplicationInterfaceMethodVO> applicationInterfaceMethodVOList) {

@@ -23,5 +23,18 @@
             </if>
         </where>
     </select>
+    <select id="queryPageByGroupIdAndGatewayId"
+            resultMap="gatewayDistributionMap">
+        select `group_id`,`system_id`,`system_name`,`gateway_id`,`create_time`,`update_time` from gateway_distribution
+        <where>
+            <if test="null != groupId and '' != groupId">
+                and group_id = #{groupId}
+            </if>
+            <if test="null != gatewayId and '' != gatewayId">
+                and gateway_id = #{gatewayId}
+            </if>
+        </where>
+        limit #{pageStart},#{pageEnd}
+    </select>
 
 </mapper>
