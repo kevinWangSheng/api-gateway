@@ -2,6 +2,7 @@ package com.kevin.gateway.interfaces;
 
 import com.kevin.gateway.application.IApiService;
 import com.kevin.gateway.application.IConfigManageService;
+import com.kevin.gateway.application.IMessageService;
 import com.kevin.gateway.domain.manage.model.aggregates.ApplicationSystemRichInfo;
 import com.kevin.gateway.domain.manage.model.vo.ApiDataVO;
 import com.kevin.gateway.domain.manage.model.vo.GatewayServerVO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wang
@@ -25,6 +27,9 @@ public class GatewayConfigManageController {
     private static final Logger logger = LoggerFactory.getLogger(GatewayConfigManageController.class);
     @Resource
     private IApiService apiService;
+
+    @Resource
+    private IMessageService messageService;
 
     @Resource
     private IConfigManageService configManageService;
@@ -69,6 +74,18 @@ public class GatewayConfigManageController {
             throw e;
         }
 
+    }
+
+    @PostMapping("queryRedisConfig")
+    public Result<Map<String,String>> queryRedisConfig(){
+        try {
+            Map<String, String> redisConfig = messageService.queryRedisConfig();
+            logger.info("查询redis配置信息:{}",redisConfig);
+            return new Result<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), redisConfig);
+        } catch (Exception e) {
+            logger.error("查询redis配置信息异常", e);
+            return new Result<>(ResponseCode.UN_ERROR.getCode(), e.getMessage(), null);
+        }
     }
 
 

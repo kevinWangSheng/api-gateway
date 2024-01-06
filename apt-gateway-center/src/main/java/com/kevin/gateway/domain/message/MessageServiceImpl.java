@@ -23,11 +23,15 @@ public class MessageServiceImpl implements IMessageService{
     @Value("6379")
     private Integer port;
 
+    @Value("13379895997.hui")
+    private String password;
+
     @Override
     public Map<String, String> queryRedisConfig() {
         return new HashMap<>(){{
             put("host",host);
             put("port",String.valueOf(port));
+            put("password",password);
         }};
     }
 
