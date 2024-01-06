@@ -1,16 +1,16 @@
 package com.kevin.gateway.infrustructs.repository;
 
-import com.kevin.gateway.domain.manage.model.vo.GatewayServerDetailVO;
-import com.kevin.gateway.domain.manage.model.vo.GatewayServerVO;
+import com.kevin.gateway.domain.manage.model.vo.*;
 import com.kevin.gateway.domain.manage.repository.IConfigManageRespository;
+
 import com.kevin.gateway.domain.utilize.ListUtil;
-import com.kevin.gateway.infrustructs.dao.IGatewayServerDao;
-import com.kevin.gateway.infrustructs.dao.IGatewayServerDetailDao;
-import com.kevin.gateway.infrustructs.po.GatewayServer;
-import com.kevin.gateway.infrustructs.po.GatewayServerDetail;
+import com.kevin.gateway.infrustructs.dao.*;
+import com.kevin.gateway.infrustructs.po.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +24,19 @@ public class ConfigManageRespository implements IConfigManageRespository {
 
     @Resource
     private IGatewayServerDetailDao gatewayServerDetailDao;
+
+    @Resource
+    private IGatewayDistributionDao gatewayDistributionDao;
+
+    @Resource
+    private IApplicationSystemDao systemDao;
+
+    @Resource
+    private IApplicationInterfaceDao interfaceDao;
+
+    @Resource
+    private IApplicationInterfaceMethodDao methodDao;
+
     @Override
     public List<GatewayServerVO> queryGatewayServerList() {
         List<GatewayServer> gatewayServers = gatewayServerDao.queryGatewayServerList();
@@ -60,5 +73,73 @@ public class ConfigManageRespository implements IConfigManageRespository {
         gatewayServerDetail.setGatewayAddress(gatewayAddress);
         gatewayServerDetail.setStatus(available);
         return gatewayServerDetailDao.updateGatewayStatus(gatewayServerDetail);
+    }
+
+    @Override
+    public List<String> queryGatewayDistributionSystemIdList(String gatewayId) {
+        List<String> systemIdList = gatewayDistributionDao.querySystemIdListByGatewayId(gatewayId);
+        return systemIdList;
+    }
+
+    @Override
+    public List<ApplicationSystemVO> queryApplicationSystemList(List<String> systemIdList) {
+        List<ApplicationSystem> applicationSystems = systemDao.querySystemListBySystemIds(systemIdList);
+
+        List<ApplicationSystemVO> applicationSystemVOList = new ArrayList<>();
+        for(ApplicationSystem applicationSystem : applicationSystems){
+            ApplicationSystemVO applicationSystemVO = new ApplicationSystemVO();
+            applicationSystemVO.setSystemId(applicationSystem.getSystemId());
+            applicationSystemVO.setSystemName(applicationSystem.getSystemName());
+            applicationSystemVO.setSystemRegistry(applicationSystem.getSystemRegistry());
+            applicationSystemVO.setSystemType(applicationSystem.getSystemType());
+            applicationSystemVOList.add(applicationSystemVO);
+        }
+        return applicationSystemVOList;
+    }
+
+    @Override
+    public List<ApplicationInterfaceVO> queryApplicationInterfaceList(List<String> systemIdList) {
+        List<ApplicationInterface> applicationInterfaces = interfaceDao.queryInterfaceListBySystemIds(systemIdList);
+
+        List<ApplicationInterfaceVO> interfaceVOList = new ArrayList<>();
+
+        for(ApplicationInterface applicationInterface : applicationInterfaces){
+            ApplicationInterfaceVO applicationInterfaceVO = new ApplicationInterfaceVO();
+            applicationInterfaceVO.setInterfaceId(applicationInterface.getInterfaceId());
+            applicationInterfaceVO.setInterfaceName(applicationInterface.getInterfaceName());
+            applicationInterfaceVO.setInterfaceVersion(applicationInterface.getInterfaceVersion());
+            interfaceVOList.add(applicationInterfaceVO);
+        }
+        return interfaceVOList;
+    }
+
+    @Override
+    public List<ApplicationInterfaceMethodVO> queryApplicationInterfaceMethodList(List<String> systemIdList, List<String> interfaceIds) {
+        List<ApplicationInterfaceMethod> methodList = methodDao.queryMethodListBySystemIdsAndInterfaceIds(systemIdList, interfaceIds);
+        if(null == methodList || methodList.isEmpty()){
+            return null;
+        }
+        List<ApplicationInterfaceMethodVO> methodVOList = new ArrayList<>();
+        for(ApplicationInterfaceMethod method:methodList){
+            ApplicationInterfaceMethodVO methodVO = new ApplicationInterfaceMethodVO();
+            methodVO.setInterfaceId(method.getInterfaceId());
+            methodVO.setMethodId(method.getMethodId());
+            methodVO.setMethodName(method.getMethodName());
+            methodVO.setParameterTypes(method.getParameterTypes());
+            methodVO.setAuth(method.getAuth());
+            methodVO.setHttpCommandType(method.getHttpCommandType());
+            methodVO.setUri(method.getUri());
+            methodVO.setSystemId(method.getSystemId());
+            methodVOList.add(methodVO);
+        }
+        return methodVOList;
+    }
+
+    @Override
+    public String queryGatewayDistributionGatewayIdBySystemId(String systemId) {
+        if(StringUtils.isBlank(systemId)){
+            return null;
+        }
+        return gatewayDistributionDao.queryGatewayIdBySystemId(systemId);
     }
 }

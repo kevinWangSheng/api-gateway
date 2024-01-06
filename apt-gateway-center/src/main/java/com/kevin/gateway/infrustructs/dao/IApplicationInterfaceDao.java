@@ -1,6 +1,9 @@
 package com.kevin.gateway.infrustructs.dao;
 
 import com.kevin.gateway.infrustructs.po.ApplicationInterface;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author wang
@@ -8,4 +11,6 @@ import com.kevin.gateway.infrustructs.po.ApplicationInterface;
  */
 public interface IApplicationInterfaceDao {
     void insert(ApplicationInterface applicationInterface);
+
+    List<ApplicationInterface> queryInterfaceListBySystemIds(@Param("systemIds") List<String> systemIdList);
 }

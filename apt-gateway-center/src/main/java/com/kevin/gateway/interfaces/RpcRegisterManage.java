@@ -1,5 +1,7 @@
 package com.kevin.gateway.interfaces;
 
+import com.kevin.gateway.application.IConfigManageService;
+import com.kevin.gateway.application.IMessageService;
 import com.kevin.gateway.application.IRegistryManageService;
 import com.kevin.gateway.domain.registry.model.vo.ApplicationInterfaceMethodVO;
 import com.kevin.gateway.domain.registry.model.vo.ApplicationInterfaceVO;
@@ -27,6 +29,13 @@ public class RpcRegisterManage {
     private static final Logger logger = LoggerFactory.getLogger(RpcRegisterManage.class);
     @Resource
     private IRegistryManageService registryManageService;
+
+    @Resource
+    private IConfigManageService configManageService;
+
+    @Resource
+    private IMessageService messageService;
+
 
     @PostMapping("registryApplication")
     public Result<Boolean> registryApplication(ApplicationSystemVO applicationSystemVO){
@@ -73,6 +82,19 @@ public class RpcRegisterManage {
         catch (Exception e) {
             logger.error("注册应用服务失败 methodId：{}", applicationInterfaceMethodVO.getMethodId(), e);
             return new Result<>(ResponseCode.UN_ERROR.getCode(), e.getMessage(), false);
+        }
+    }
+
+    @PostMapping("registryEvent")
+    public Result<Boolean> registryEvent(@RequestParam String systemId){
+        logger.info("服务又重新注册了新的系统网关：{}",systemId);
+        try {
+            String gatewayId = configManageService.queryGatewayDistributionGatewayIdBySystemId(systemId);
+            messageService.pushMessage(gatewayId,systemId);
+            return new Result<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
+        } catch (Exception e) {
+            logger.error("服务注册新的系统发送事件失败:{}",e.getMessage());
+            throw e;
         }
     }
 }

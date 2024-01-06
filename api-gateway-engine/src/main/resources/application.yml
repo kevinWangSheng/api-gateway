@@ -1,0 +1,6 @@
+api-gateway:
+  address: http://127.0.0.1:8090
+  groupId: 10001
+  gateway-id: api-gateway-g4
+  gateway-name: 电商配送网关
+  gateway-address: 127.0.0.1:6789

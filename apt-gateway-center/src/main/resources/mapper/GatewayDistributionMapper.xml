@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kevin.gateway.infrustructs.dao.IGatewayDistributionDao">
+    <resultMap id="gatewayDistributionMap" type="com.kevin.gateway.infrustructs.po.GatewayDistribution">
+        <id column="id" property="id"/>
+        <id column="group_id" property="groupId"/>
+        <id column="system_id" property="systemId"/>
+        <id column="system_name" property="systemName"/>
+        <id column="create_time" property="createTime"/>
+        <id column="update_time" property="updateTime"/>
+        <id column="gateway_id" property="gatewayId"/>
+    </resultMap>
+    <select id="querySystemIdListByGatewayId" resultType="java.lang.String">
+        SELECT system_id FROM gateway_distribution WHERE gateway_id = #{gatewayId}
+    </select>
+    <select id="queryGatewayIdBySystemId" resultType="java.lang.String">
+        select gateway_id from gateway_distribution
+        <where>
+            <if test="null != systemId and '' != systemId">
+                and system_id = #{systemId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

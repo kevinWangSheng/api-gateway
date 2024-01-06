@@ -1,7 +1,7 @@
 package com.kevin.gateway.domain.manage.repository;
 
-import com.kevin.gateway.domain.manage.model.vo.GatewayServerDetailVO;
-import com.kevin.gateway.domain.manage.model.vo.GatewayServerVO;
+import com.kevin.gateway.domain.manage.model.vo.*;
+
 
 import java.util.List;
 
@@ -17,4 +17,14 @@ public interface IConfigManageRespository {
     GatewayServerDetailVO queryGatewayServerDetail(String gatewayId,String gatewayAddress);
 
     boolean updateGatewayStatus(String gatewayId,String gatewayAddress,Integer available);
+
+    List<String> queryGatewayDistributionSystemIdList(String gatewayId);
+
+    List<ApplicationSystemVO> queryApplicationSystemList(List<String> systemIdList);
+
+    List<ApplicationInterfaceVO> queryApplicationInterfaceList(List<String> systemIdList);
+
+    List<ApplicationInterfaceMethodVO> queryApplicationInterfaceMethodList(List<String> systemIdList, List<String> interfaceIds);
+
+    String queryGatewayDistributionGatewayIdBySystemId(String systemId);
 }

@@ -32,6 +32,17 @@
         now()
         )
     </insert>
+    <select id="queryInterfaceListBySystemIds"
+            resultMap="applicationInterfaceMap">
+        select `system_id`,`interface_id`,`interface_name`, `interface_version` from application_interface
+        <where>
+            <if test="null != systemIds and systemIds.size() > 0 ">
+                and system_id in
+                <foreach collection="systemIds" item="systemId" open="(" separator="," close=")">
+                    #{systemId}
+                </foreach>
+        </where>
+    </select>
 
 
 </mapper>

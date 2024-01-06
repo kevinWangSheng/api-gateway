@@ -2,6 +2,7 @@ package com.kevin.gateway.interfaces;
 
 import com.kevin.gateway.application.IApiService;
 import com.kevin.gateway.application.IConfigManageService;
+import com.kevin.gateway.domain.manage.model.aggregates.ApplicationSystemRichInfo;
 import com.kevin.gateway.domain.manage.model.vo.ApiDataVO;
 import com.kevin.gateway.domain.manage.model.vo.GatewayServerVO;
 import com.kevin.gateway.infrustructs.common.Constance;
@@ -56,6 +57,20 @@ public class GatewayConfigManageController {
     public void distributionGatewayServerNode(@RequestParam String groupId, @RequestParam String gatewayId){
 
     }
+
+    @PostMapping("queryApplicationSystemRichInfo")
+    public Result<ApplicationSystemRichInfo> queryApplicationSystemRichInfo(@RequestParam String gatewayId){
+        try {
+            logger.info("查询分配到网关下的待注册系统信息(系统、接口、方法) gatewayId：{}",gatewayId);
+            ApplicationSystemRichInfo applicationSystemRichInfo = configManageService.queryApplicationSystemRichInfo(gatewayId);
+            return new Result<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), applicationSystemRichInfo);
+        } catch (Exception e) {
+            logger.error("获取分配到网关下的待注册系统信息异常", e);
+            throw e;
+        }
+
+    }
+
 
 
 }

@@ -14,6 +14,8 @@ public class GatewayDistribution implements Serializable {
 
     private String systemId;
 
+    private String gatewayId;
+
     private String groupId;
 
     private String systemName;
@@ -25,13 +27,22 @@ public class GatewayDistribution implements Serializable {
     public GatewayDistribution() {
     }
 
-    public GatewayDistribution(long id, String systemId, String groupId, String systemName, Date createTime, Date updateTime) {
+    public GatewayDistribution(long id, String systemId, String gatewayId,String groupId, String systemName, Date createTime, Date updateTime) {
         this.id = id;
         this.systemId = systemId;
         this.groupId = groupId;
         this.systemName = systemName;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.gatewayId = gatewayId;
+    }
+
+    public String getGatewayId() {
+        return gatewayId;
+    }
+
+    public void setGatewayId(String gatewayId) {
+        this.gatewayId = gatewayId;
     }
 
     public long getId() {

@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * @create 2024-01-02-18:53
  */
 @Component
-public class RegistryManageRepository implements IRegistryManageRepository {
+public class RpcRegistryManageRepository implements IRegistryManageRepository {
     @Resource
     private IApplicationInterfaceDao applicationInterfaceDao;
 

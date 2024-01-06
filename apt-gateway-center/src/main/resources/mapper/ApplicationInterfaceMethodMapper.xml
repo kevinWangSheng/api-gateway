@@ -44,4 +44,22 @@
         now()
         )
     </insert>
+    <select id="queryMethodListBySystemIdsAndInterfaceIds"
+            resultMap="applicationInterfaceMethodMap">
+        select `system_id`,`interface_id`,`method_id`,`method_name`,`parameter_type`,`uri`,`http_command_type`,`auth` from application_interface_method
+        <where>
+            <if test="null != systemIds and systemIds.size() > 0 ">
+                and system_id in
+                <foreach collection="systemIds" item="systemId" open="(" separator="," close=")">
+                    #{systemId}
+                </foreach>
+            </if>
+            <if test="null != interfaceIds and interfaceIds.size() > 0 ">
+                and interface_id in
+                <foreach collection="interfaceIds" item="interfaceId" open="(" separator="," close=")">
+                    #{interfaceId}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

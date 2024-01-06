@@ -23,11 +23,13 @@ import java.util.Map;
  */
 public class Configuration {
 
-    private String host;
+    private String host = "127.0.0.1";
 
-    private Integer port;
+    private Integer port = 6789;
 
+    private int bossNThreads = 1;
 
+    private int workNThreads = 4;
 
     private final MapperRegistry mapperRegistry = new MapperRegistry(this);
 
@@ -132,6 +134,22 @@ public class Configuration {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public int getBossNThreads() {
+        return bossNThreads;
+    }
+
+    public void setBossNThreads(int bossNThreads) {
+        this.bossNThreads = bossNThreads;
+    }
+
+    public int getWorkNThreads() {
+        return workNThreads;
+    }
+
+    public void setWorkNThreads(int workNThreads) {
+        this.workNThreads = workNThreads;
     }
 }
 
