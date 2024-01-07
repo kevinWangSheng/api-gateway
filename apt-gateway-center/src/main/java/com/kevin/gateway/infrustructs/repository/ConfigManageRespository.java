@@ -237,4 +237,24 @@ public class ConfigManageRespository implements IConfigManageRespository {
         }
         return methodVOList;
     }
+
+    @Override
+    public List<GatewayServerDetailVO> queryGatewayServerDetailListByGatewayId(String gatewayId) {
+        List<GatewayServerDetail> detailList = gatewayServerDetailDao.queryListByGatewayId(gatewayId);
+        List<GatewayServerDetailVO> detailVOList = new ArrayList<>();
+
+        for(GatewayServerDetail detail:detailList){
+            GatewayServerDetailVO detailVO = new GatewayServerDetailVO();
+            detailVO.setGatewayId(detail.getGatewayId());
+            detailVO.setGatewayName(detail.getGatewayName());
+            detailVO.setGatewayAddress(detail.getGatewayAddress());
+            detailVO.setStatus(detail.getStatus());
+            detailVO.setId(detail.getId());
+            detailVO.setGroupId(detail.getGroupId());
+            detailVO.setCreateTime(detail.getCreateTime());
+            detailVO.setUpdateTime(detail.getUpdateTime());
+            detailVOList.add(detailVO);
+        }
+        return detailVOList;
+    }
 }

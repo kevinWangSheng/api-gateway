@@ -113,6 +113,11 @@ public class ConfigManageServiceImpl implements IConfigManageService {
         return configManageRespository.queryApplicationInterfaceMethodPage(applicationInterfaceMethodDto);
     }
 
+    @Override
+    public List<GatewayServerDetailVO> queryGatewayServerDetailListByGatewayId(String gatewayId) {
+        return configManageRespository.queryGatewayServerDetailListByGatewayId(gatewayId);
+    }
+
     private ApplicationSystemRichInfo buildApplicationSystemVOList(String gatewayId,List<ApplicationSystemVO> applicationSystemVOList, List<ApplicationInterfaceVO> applicationInterfaceVOList, List<ApplicationInterfaceMethodVO> applicationInterfaceMethodVOList) {
         for(ApplicationSystemVO systemVO:applicationSystemVOList){
             List<ApplicationInterfaceVO> interfaceVOS = applicationInterfaceVOList.stream().filter(itf -> itf.getSystemId().equals(systemVO.getSystemId())).collect(Collectors.toList());

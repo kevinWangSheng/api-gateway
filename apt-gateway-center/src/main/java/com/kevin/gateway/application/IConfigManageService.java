@@ -36,4 +36,6 @@ public interface IConfigManageService {
     List<ApplicationInterfaceDataVO> queryApplicationInterfacePage(ApplicationInterfaceDto applicationInterfaceDto);
 
     List<ApplicationInterfaceMethodDataVO> queryApplicationInterfaceMethodPage(ApplicationInterfaceMethodDto applicationInterfaceMethodDto);
+
+    List<GatewayServerDetailVO> queryGatewayServerDetailListByGatewayId(String gatewayId);
 }

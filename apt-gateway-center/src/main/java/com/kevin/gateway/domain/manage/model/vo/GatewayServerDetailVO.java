@@ -2,11 +2,17 @@ package com.kevin.gateway.domain.manage.model.vo;
 
 import com.kevin.gateway.infrustructs.po.GatewayServerDetail;
 
+import java.util.Date;
+
 /**
  * @author wang
  * @create 2024-01-02-16:01
  */
 public class GatewayServerDetailVO {
+    /** 自增ID */
+    private Long id;
+    /** 分组标识 */
+    private String groupId;
     private String gatewayId;
 
 
@@ -15,6 +21,10 @@ public class GatewayServerDetailVO {
     private String gatewayAddress;
 
     private Integer status;
+
+    private Date createTime;
+    /** 更新时间 */
+    private Date updateTime;
 
     public GatewayServerDetailVO() {
     }
@@ -66,5 +76,37 @@ public class GatewayServerDetailVO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

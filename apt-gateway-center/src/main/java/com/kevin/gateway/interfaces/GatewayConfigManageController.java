@@ -2,10 +2,15 @@ package com.kevin.gateway.interfaces;
 
 import com.kevin.gateway.application.IApiService;
 import com.kevin.gateway.application.IConfigManageService;
+import com.kevin.gateway.application.ILoadBalancingService;
 import com.kevin.gateway.application.IMessageService;
+import com.kevin.gateway.domain.docker.model.aggregates.NginxConfig;
+import com.kevin.gateway.domain.docker.model.vo.LocationVO;
+import com.kevin.gateway.domain.docker.model.vo.UpstreamVO;
 import com.kevin.gateway.domain.manage.model.aggregates.ApplicationSystemRichInfo;
 import com.kevin.gateway.domain.manage.model.dto.*;
 import com.kevin.gateway.domain.manage.model.vo.ApplicationSystemVO;
+import com.kevin.gateway.domain.manage.model.vo.GatewayServerDetailVO;
 import com.kevin.gateway.domain.manage.model.vo.GatewayServerVO;
 import com.kevin.gateway.domain.operator.model.vo.*;
 import com.kevin.gateway.infrustructs.common.ResponseCode;
@@ -15,10 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author wang
@@ -38,6 +46,9 @@ public class GatewayConfigManageController {
     @Resource
     private IConfigManageService configManageService;
 
+    @Resource
+    private ILoadBalancingService loadBalancingService;
+
     @GetMapping("queryServerConfig")
     public Result<List<GatewayServerVO>> queryServerConfig() {
         try {
@@ -55,6 +66,32 @@ public class GatewayConfigManageController {
         try {
             logger.info("注册网关服务节点 gatewayId：{} gatewayName：{} gatewayAddress：{}", gatewayId, gatewayName, gatewayAddress);
             boolean done = configManageService.registryGatewayServerNode(groupId, gatewayId, gatewayName, gatewayAddress);
+            // 获取对应注册的网关的所有细节信息
+            List<GatewayServerDetailVO> detailVOList = configManageService.queryGatewayServerDetailListByGatewayId(gatewayId);
+            Map<String, List<GatewayServerDetailVO>> byGourpMap = detailVOList.stream().collect(Collectors.groupingBy(value -> value.getGroupId()));
+            // 获取所有的分组ID
+            Set<String> groupIdSet = byGourpMap.keySet();
+            List<LocationVO> locationVOList = new ArrayList<>();
+            for(String group:groupIdSet){
+                // location /api01/ {
+                //     rewrite ^/api01/(.*)$ /$1 break;
+                // 	   proxy_pass http://api01;
+                // }
+                locationVOList.add(new LocationVO("/" + group + "/","http://" + group + ";"));
+            }
+
+            List<UpstreamVO> upstreamVOList = new ArrayList<>();
+            for(String group:groupIdSet){
+                // upstream api01 {
+                //     least_conn;
+                //     server 124.221.25.145:9001;
+                //     #server 124.221.25.145:9002;
+                // }
+                List<String> serverAddress = byGourpMap.get(group).stream().map(detail -> detail.getGatewayAddress()).collect(Collectors.toList());
+                upstreamVOList.add(new UpstreamVO(group,"least_conn;",serverAddress));
+            }
+            // 刷新nginx配置
+            loadBalancingService.updateNginxConfig(new NginxConfig(upstreamVOList,locationVOList));
             return new Result<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), done);
         } catch (Exception e) {
             logger.error("注册网关服务节点异常", e);

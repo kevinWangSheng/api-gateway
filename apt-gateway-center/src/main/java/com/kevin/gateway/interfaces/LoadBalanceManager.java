@@ -53,7 +53,6 @@ public class LoadBalanceManager {
             loadBalancingService.updateNginxConfig(nginxConfig);
         } catch (Exception e) {
             logger.error("updateNginxConfig error", e);
-            throw e;
         }
     }
 }

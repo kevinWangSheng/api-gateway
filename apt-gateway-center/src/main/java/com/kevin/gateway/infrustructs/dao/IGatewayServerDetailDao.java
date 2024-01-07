@@ -17,4 +17,6 @@ public interface IGatewayServerDetailDao {
     boolean updateGatewayStatus(GatewayServerDetail gatewayServerDetail);
 
     List<GatewayServerDetail> queryPageByGroupIdAndGatewayId(GatewayServerDetailDto gatewayDetailRequest);
+
+    List<GatewayServerDetail> queryListByGatewayId(String gatewayId);
 }
