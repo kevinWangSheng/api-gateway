@@ -14,7 +14,7 @@ import java.io.IOException;
 public abstract class AbstractLoadBalanceService implements ILoadBalancingService {
     static final Logger logger = LoggerFactory.getLogger(AbstractLoadBalanceService.class);
     @Override
-    public void updateNginxConfig(NginxConfig nginxConfig) {
+    public void updateNginxConfig(NginxConfig nginxConfig) throws IOException, InterruptedException {
         String nginxConfigFilePath = createNginxConfigFile(nginxConfig);
         logger.info("创建nginx配置文件，路径：{}", nginxConfigFilePath);
         reflushNginxConfig(nginxConfig.getNginxName());
