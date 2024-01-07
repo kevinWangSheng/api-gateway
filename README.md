@@ -13,7 +13,7 @@ API网关你可以理解为以前通过web mvc的方式给外部提供接口调�
 
 基本如下：
 
-![img.png](doc/img/img1.png)![image-20231228205411089](C:\Users\wang sheng hui\AppData\Roaming\Typora\typora-user-images\image-20231228205411089.png) 
+![img.png](doc/img/img1.png)
 
 首先两个服务要想相互调用，必须要有连接，那么通过什么进行连接呢？我们这里通过注册中心zookeeper的方式进行连接，然后通过全类名的方式+方法进行在对应的注册中心查找对应的方法调用的类，然后在通过对应的参数类型，参数值通过cglib的方式进行动态代理他进行执行对应的方法。
 
