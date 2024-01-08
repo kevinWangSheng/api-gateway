@@ -1,0 +1,7 @@
+server:
+  port: 8081
+spring:
+  redis:
+    host: 124.221.25.145
+    port: 6380
+    password: 13379895997.hui
